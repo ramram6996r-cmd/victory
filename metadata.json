@@ -1,0 +1,6 @@
+{
+  "name": "Victory Coaching Center",
+  "description": "Professional coaching and training institute in Chitradurga for CET, NEET, teaching recruitment, and competitive government exams.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

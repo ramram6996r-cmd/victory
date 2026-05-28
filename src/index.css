@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", var(--font-sans);
+  
+  --color-indigo-50: #eef2ff;
+  --color-indigo-100: #e0e7ff;
+  --color-indigo-900: #1e1b4b;
+  
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  
+  /* Overrides for dynamic adaptation to the "Bold Typography" Theme */
+  --color-sky-50: #f5f3ff;
+  --color-sky-100: #e0e7ff;
+  --color-sky-600: #312e81; /* Indigo - Majestic brand color */
+  --color-sky-700: #1e1b4b; /* Deep Indigo */
+  --color-sky-800: #1a1845;
+  --color-sky-950: #111030;
+  
+  --color-amber-400: #f97316; /* Vibrant Orange override for CTA */
+  --color-amber-500: #f97316; /* Consistent Bold Theme Accent */
+  --color-amber-600: #ea580c; /* Richer orange hover */
+}
+
+/* Custom styles for professional touch */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Bold Typography theme special helpers */
+.font-display-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.thick-underline {
+  text-decoration-color: #f97316;
+  text-decoration-line: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 4px;
+}
+
+.bold-bento-card {
+  border-width: 2px;
+  border-color: #1e1b4b;
+  box-shadow: 4px 4px 0px 0px #1e1b4b;
+  border-style: solid;
+}
+
+.bold-border-button {
+  border-width: 2px;
+  border-color: #1e1b4b;
+  box-shadow: 3px 3px 0px 0px #1e1b4b;
+}
+
+.orange-bento-card {
+  border-width: 2px;
+  border-color: #f97316;
+  box-shadow: 4px 4px 0px 0px #f97316;
+  border-style: solid;
+}
+
