@@ -9,6 +9,7 @@ export default function ContactUs() {
   const [formPhone, setFormPhone] = useState('');
   const [formMessage, setFormMessage] = useState('');
   const [submitStatus, setSubmitStatus] = useState<string | null>(null);
+  const [whatsappLink, setWhatsappLink] = useState('');
 
   const phoneNumbers = [
     { number: '9611441997', label: 'Call Support 1' },
@@ -21,14 +22,31 @@ export default function ContactUs() {
     e.preventDefault();
     if (!formName.trim() || !formPhone.trim()) return;
 
-    setSubmitStatus('Your question has been sent! We will reply on WhatsApp shortly.');
+    const targetPhone = '919591111676';
+    const messageText = `*VICTORY COACHING CENTER - QUICK INQUIRY*\n` +
+      `---------------------------------------\n` +
+      `*Name:* ${formName}\n` +
+      `*WhatsApp Phone:* ${formPhone}\n` +
+      `*Question Details:* ${formMessage || 'N/A'}`;
+    
+    const encodedText = encodeURIComponent(messageText);
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodedText}`;
+
+    try {
+      window.open(whatsappUrl, '_blank');
+    } catch (popupException) {
+      console.warn("Auto-redirect blocked:", popupException);
+    }
+
+    setWhatsappLink(whatsappUrl);
+    setSubmitStatus('Your question has been logged successfully! Click the button below to send details via WhatsApp manually if the tab did not open.');
     setFormName('');
     setFormPhone('');
     setFormMessage('');
 
     setTimeout(() => {
       setSubmitStatus(null);
-    }, 6000);
+    }, 12000);
   };
 
   return (
@@ -117,9 +135,23 @@ export default function ContactUs() {
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="bg-orange-500/10 border-2 border-orange-500 text-indigo-950 font-black p-3.5 rounded-none text-xs"
+                  className="bg-orange-500/10 border-2 border-orange-500 text-indigo-950 font-bold p-4 rounded-none text-xs space-y-3"
                 >
-                  {submitStatus}
+                  <p className="font-extrabold uppercase tracking-wide text-orange-650">⚡ Inquiry Logged!</p>
+                  <p className="leading-relaxed">{submitStatus}</p>
+                  {whatsappLink && (
+                    <div className="pt-1.5">
+                      <a
+                        href={whatsappLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-black py-2.5 px-3 border-2 border-indigo-950 shadow-[2px_2px_0px_0px_#111030] text-[10px] uppercase tracking-widest text-center transition-all flex items-center justify-center gap-1.5 cursor-pointer relative z-10"
+                      >
+                        <MessageSquareText className="w-3.5 h-3.5 text-white animate-pulse" />
+                        <span>Send WhatsApp Details</span>
+                      </a>
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

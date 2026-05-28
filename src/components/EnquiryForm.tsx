@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { COURSES, BATCH_TIMINGS } from '../data';
 import { EnquirySubmission } from '../types';
-import { Bookmark, Send, Sparkles, CheckCircle2, History, RotateCcw, AlertCircle } from 'lucide-react';
+import { Bookmark, Send, Sparkles, CheckCircle2, History, RotateCcw, AlertCircle, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface EnquiryFormProps {
@@ -25,6 +25,7 @@ export default function EnquiryForm({ preFilledCourseId, preFilledDiscount, preF
   // Success state
   const [isSuccess, setIsSuccess] = useState(false);
   const [latestSubmission, setLatestSubmission] = useState<EnquirySubmission | null>(null);
+  const [whatsappLink, setWhatsappLink] = useState('');
   
   // Local list of submissions
   const [localSubmissions, setLocalSubmissions] = useState<EnquirySubmission[]>([]);
@@ -97,6 +98,33 @@ export default function EnquiryForm({ preFilledCourseId, preFilledDiscount, preF
     const updated = [newSubmission, ...localSubmissions];
     setLocalSubmissions(updated);
     localStorage.setItem('victory_enquiries', JSON.stringify(updated));
+
+    // Construct WhatsApp message mapping
+    const targetPhone = '919591111676';
+    const courseTitle = getCourseTitle(courseId);
+    const waiverText = computedDiscount > 0 ? `${computedDiscount}% Off Tuition` : 'None';
+    const messageText = `*VICTORY COACHING CENTER - ADMISSION ENQUIRY*\n` +
+      `---------------------------------------\n` +
+      `*Student Name:* ${studentName}\n` +
+      `*Parent/Guardian:* ${parentName || 'N/A'}\n` +
+      `*WhatsApp Phone:* ${phone}\n` +
+      `*Email Address:* ${email || 'N/A'}\n` +
+      `*Course Selected:* ${courseTitle}\n` +
+      `*Preferred Session:* ${batchPreference.toUpperCase()}\n` +
+      `*Score/Board %:* ${scorePercentage ? scorePercentage + '%' : 'N/A'}\n` +
+      `*Merit Scholarship:* ${waiverText}\n` +
+      `*Remarks/Notes:* ${notes || 'None'}`;
+    
+    const encodedText = encodeURIComponent(messageText);
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodedText}`;
+    
+    try {
+      window.open(whatsappUrl, '_blank');
+    } catch (popupException) {
+      console.warn("Auto-redirect blocked:", popupException);
+    }
+
+    setWhatsappLink(whatsappUrl);
 
     // Show success dialog
     setLatestSubmission(newSubmission);
@@ -341,6 +369,23 @@ export default function EnquiryForm({ preFilledCourseId, preFilledDiscount, preF
                   <p className="text-xs text-slate-700 mt-3 leading-relaxed font-bold">
                     Thank you, <strong className="text-indigo-950">{latestSubmission.studentName}</strong>. Your counseling ticket has been generated. Our Chitradurga branch representative/professor will phone you shortly at <strong className="text-orange-600 font-mono">{latestSubmission.phone}</strong>.
                   </p>
+
+                  {whatsappLink && (
+                    <div className="mt-4">
+                      <a
+                        href={whatsappLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-black py-3 px-4 border-2 border-indigo-950 shadow-[3px_3px_0px_0px_#111030] text-xs uppercase tracking-widest text-center transition-all flex items-center justify-center gap-2 cursor-pointer relative z-10"
+                      >
+                        <MessageSquare className="w-4 h-4 text-white" />
+                        <span>Send Details to WhatsApp Now</span>
+                      </a>
+                      <p className="text-[10px] text-center text-slate-500 font-bold mt-1.5 leading-tight">
+                        Our WhatsApp support number is <strong className="font-extrabold text-[#111030]">+91 95911 11676</strong>
+                      </p>
+                    </div>
+                  )}
 
                   <div className="mt-4 pt-3 border-t-2 border-indigo-950/10 space-y-1.5 text-xs text-slate-700">
                     <p className="flex justify-between">
